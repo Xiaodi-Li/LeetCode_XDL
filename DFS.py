@@ -53,7 +53,7 @@ class Solution:
         
         ans = []
         dfs(s, 0, l, r, ans)
-        return and    
+        return ans  
 
 # 829 · Word Pattern II
 # Description
