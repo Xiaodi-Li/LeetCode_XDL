@@ -163,4 +163,71 @@ class N_Queens_II:
         backtracking(0)
         return self.res
 
+# 152 · Combinations
+# Description
+# Given two integers n and k. Return all possible combinations of k numbers out of 1, 2, ... , n.
+class Combinations:
+    """
+    @param n: Given the range of numbers
+    @param k: Given the numbers of combinations
+    @return: All the combinations of k numbers out of 1..n
+             we will sort your return value in output
+    """
+
+    def combine(self, n: int, k: int) -> List[List[int]]:
+        # write your code here
+        self.results = []
+
+        nums = []
+        for i in range(1, n + 1):
+            nums.append(i)
+
+        self.dfs(nums, k, [], 0)
+
+        return self.results
+
+    def dfs(self, nums, k, subset, index):
+        if len(subset) == k:
+            self.results.append(subset)
+            return
+
+        for i in range(index, len(nums)):
+            self.dfs(nums, k, subset + [nums[i]], i + 1)
+
+# 153 · Combination Sum II
+# Description
+# Given an array num and a number target. Find all unique combinations in num where the numbers sum to target.
+class Combination_Sum_II:
+    """
+    @param num: Given the candidate numbers
+    @param target: Given the target number
+    @return: All the combinations that sum to target
+             we will sort your return value in output
+    """
+
+    def combination_sum2(self, num: List[int], target: int) -> List[List[int]]:
+        # write your code here
+        num.sort()
+
+        res = []
+
+        def backtrack(cur, pos, target):
+            if target == 0:
+                res.append(cur.copy())
+            if target <= 0:
+                return
+
+            prev = -1
+            for i in range(pos, len(num)):
+                if num[i] == prev:
+                    continue
+
+                cur.append(num[i])
+                backtrack(cur, i + 1, target - num[i])
+                cur.pop()
+                prev = num[i]
+
+        backtrack([], 0, target)
+        return res
+
 
