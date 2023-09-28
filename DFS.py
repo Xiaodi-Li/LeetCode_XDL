@@ -328,5 +328,174 @@ class Split_String:
                 self.dfs(res, path, s[i + 1:])
                 path.pop()
 
+# 780 · Remove Invalid Parentheses
+# Description
+# Remove the minimum number of invalid parentheses in order to make the input string valid. Return all possible results.
+class Invalid_Parentheses:
+    """
+    @param s: The input string
+    @return: Return all possible results
+             we will sort your return value in output
+    """
 
+    def remove_invalid_parentheses(self, s: str) -> List[str]:
+        # Write your code here
+        def isValid(s):
+            count = 0
+            for ch in s:
+                if ch == '(':
+                    count += 1
+                elif ch == ')':
+                    count -= 1
+                if count < 0:
+                    return False
+            return count == 0
 
+        def dfs(s, start, l, r, ans):
+            if l == 0 and r == 0:
+                if isValid(s):
+                    ans.append(s)
+                return
+
+            for i in range(start, len(s)):
+                if i != start and s[i] == s[i - 1]:
+                    continue
+
+                if s[i] == '(' or s[i] == ')':
+                    curr = s[:i] + s[i + 1:]
+                    if r > 0 and s[i] == ')':
+                        dfs(curr, i, l, r - 1, ans)
+                    if l > 0 and s[i] == '(':
+                        dfs(curr, i, l - 1, r, ans)
+
+        l = 0
+        r = 0
+
+        for ch in s:
+            l += (ch == '(')
+            if l == 0:
+                r += (ch == ')')
+            else:
+                l -= (ch == ')')
+
+        ans = []
+        dfs(s, 0, l, r, ans)
+        return ans
+
+# 802 · Sudoku Solver
+# Description
+# Write a program to solve a Sudoku puzzle by filling the empty cells.
+#
+# Empty cells are indicated by the number 0.
+#
+# You may assume that there will be only one unique solution.
+class Sudoku:
+    """
+    @param board: the sudoku puzzle
+    @return: nothing
+    """
+
+    def solve_sudoku(self, board: List[List[int]]):
+        # write your code here
+        self.backtrack(board, 0, 0)
+        return board
+
+    def backtrack(self, board, i, j):
+        m, n = 9, 9
+        if j == n:
+            return self.backtrack(board, i + 1, 0)
+        if i == m:
+            return True
+        if board[i][j] != 0:
+            return self.backtrack(board, i, j + 1)
+        for val in range(1, 10):
+            if not self.isValid(board, i, j, val):
+                continue
+            board[i][j] = val
+            if self.backtrack(board, i, j):
+                return True
+            board[i][j] = 0
+
+    def isValid(self, board, row, col, val):
+        for i in range(9):
+            if board[row][i] == val:
+                return False
+            if board[i][col] == val:
+                return False
+            if board[row // 3 * 3 + i // 3][col // 3 * 3 + i % 3] == val:
+                return False
+        return True
+
+# 816 · Traveling Salesman Problem
+# Description
+# Give n cities(labeled from 1 to n), and the undirected road's cost among the cities as a three-tuple [A, B, c](i.e there is a road between city A and city B and the cost is c). We need to find the smallest cost to travel all the cities starting from 1.
+class Traveling_Salesman:
+    """
+    @param n: an integer,denote the number of cities
+    @param roads: a list of three-tuples,denote the road between cities
+    @return: return the minimum cost to travel all cities
+    """
+
+    def min_cost(self, n: int, roads: List[List[int]]) -> int:
+        # Write your code here
+        self.n = n
+        self.g = [[float('inf')] * n for _ in range(n)]
+        self.done = [False] * n
+        self.res = float('inf')
+
+        for x, y, c in roads:
+            x -= 1
+            y -= 1
+            self.g[x][y] = min(self.g[x][y], c)
+            self.g[y][x] = min(self.g[y][x], c)
+
+        self.done[0] = True
+        self.dfs(1, 0, 0)
+        return self.res
+
+    def dfs(self, level, p, c):
+        if c >= self.res:
+            return
+
+        if level == self.n:
+            self.res = c
+            return
+
+        for i in range(self.n):
+            if not self.done[i] and self.g[p][i] != float('inf'):
+                self.done[i] = True
+                self.dfs(level + 1, i, c + self.g[p][i])
+                self.done[i] = False
+
+# 829 · Word Pattern II
+# Description
+# Given a pattern and a string str, find if str follows the same pattern.
+#
+# Here follow means a full match, such that there is a bijection between a letter in pattern and a non-empty substring in str.(i.e if a corresponds to s, then b cannot correspond to s. For example, given pattern = "ab", str = "ss", return false.)
+class Word_Pattern_II:
+    """
+    @param pattern: a string,denote pattern string
+    @param str: a string, denote matching string
+    @return: a boolean
+    """
+
+    def word_pattern_match(self, pattern: str, str: str) -> bool:
+        # write your code here
+        return self.backtrack(pattern, str, {})
+
+    def backtrack(self, ptn, s, map):
+        if not ptn: return not s
+
+        if ptn[0] in map:
+            prefix = map[ptn[0]]
+            if not s.startswith(prefix): return False
+            return self.backtrack(ptn[1:], s[len(prefix):], map)
+
+        for i in range(1, len(s) + 1):
+            prefix = s[:i]
+            if prefix in map.values(): continue
+            map[ptn[0]] = prefix
+            if self.backtrack(ptn[1:], s[len(prefix):], map): return True
+            del map[ptn[0]]
+
+        return False
