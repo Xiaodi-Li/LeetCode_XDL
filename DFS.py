@@ -230,4 +230,103 @@ class Combination_Sum_II:
         backtrack([], 0, target)
         return res
 
+# 426 · Restore IP Addresses
+# Description
+# Given a string containing only digits, restore it by returning all possible valid IP address combinations.
+#
+# (Your task is to add three dots to this string to make it a valid IP address. Return all possible IP address.)
+class Restore_IP:
+    """
+    @param s: the IP string
+    @return: All possible valid IP addresses
+             we will sort your return value in output
+    """
+
+    def restore_ip_addresses(self, s: str) -> List[str]:
+        # write your code here
+        res = []
+
+        if len(s) > 12:
+            return res
+
+        def backtrack(i, dots, curIP):
+            if dots == 4 and i == len(s):
+                res.append(curIP[:-1])
+                return
+            if dots > 4:
+                return
+
+            for j in range(i, min(i + 3, len(s))):
+                if int(s[i:j + 1]) < 256 and (i == j or s[i] != '0'):
+                    backtrack(j + 1, dots + 1, curIP + s[i:j + 1] + '.')
+
+        backtrack(0, 0, '')
+        return res
+
+# 570 · Find the Missing Number II
+# Description
+# Given a permutation of 1 - n integers in random order, find an integer that is missing.
+class Missing_Number_II:
+    """
+    @param n: An integer
+    @param s: a string with number from 1-n in random order and miss one number
+    @return: An integer
+    """
+
+    def find_missing2(self, n: int, s: str) -> int:
+        # write your code here
+        self.theMissing = -1
+        isFound = [False] * (n + 1)
+        self.dfs(n, s, 0, isFound)
+        return self.theMissing
+
+    def dfs(self, n, s, start, isFound):
+        if self.theMissing != -1:
+            return
+
+        if start == len(s):
+            for i in range(1, n + 1):
+                if not isFound[i]:
+                    self.theMissing = i
+                    return
+            return
+
+        if s[start] == '0':
+            return
+
+        for ch in range(1, 3):
+            if start + ch <= len(s):
+                num = int(s[start:start + ch])
+                if 0 < num <= n and not isFound[num]:
+                    isFound[num] = True
+                    self.dfs(n, s, start + ch, isFound)
+                    isFound[num] = False
+
+# 680 · Split String
+# Description
+# Give a string, you can choose to split the string after one character or two adjacent characters, and make the string to be composed of only one character or two characters. Output all possible results.
+class Split_String:
+    """
+    @param s: a string to be split
+    @return: all possible split string array
+    """
+
+    def split_string(self, s: str) -> List[List[str]]:
+        # write your code here
+        res = []
+        self.dfs(res, [], s)
+        return res
+
+    def dfs(self, res, path, s):
+        if s == "":
+            res.append(path[:])
+            return
+
+        for i in range(2):
+            if i + 1 <= len(s):
+                path.append(s[:i + 1])
+                self.dfs(res, path, s[i + 1:])
+                path.pop()
+
+
 
