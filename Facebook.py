@@ -94,4 +94,78 @@ class Median_of_Two:
             else:
                 l = i + 1
 
+# 5. Longest Palindromic Substring
+# Given a string s, return the longest palindromic substring in s.
+class Longest_Palindromic_Substring:
+    def longestPalindrome(self, s: str) -> str:
+        res = ""
+        resLen = 0
+
+        for i in range(len(s)):
+            l, r = i, i
+            while l >= 0 and r < len(s) and s[l] == s[r]:
+                if r - l + 1 > resLen:
+                    res = s[l:r + 1]
+                    resLen = r - l + 1
+                l -= 1
+                r += 1
+
+            l, r = i, i + 1
+            while l >= 0 and r < len(s) and s[l] == s[r]:
+                if r - l + 1 > resLen:
+                    res = s[l:r + 1]
+                    resLen = r - l + 1
+                l -= 1
+                r += 1
+
+        return res
+
+# 6. Zigzag Conversion
+# The string "PAYPALISHIRING" is written in a zigzag pattern on a given number of rows like this: (you may want to display this pattern in a fixed font for better legibility)
+#
+# P   A   H   N
+# A P L S I I G
+# Y   I   R
+# And then read line by line: "PAHNAPLSIIGYIR"
+#
+# Write the code that will take a string and make this conversion given a number of rows:
+#
+# string convert(string s, int numRows);
+class Zigzag_Conversion:
+    def convert(self, s: str, numRows: int) -> str:
+        if numRows == 1: return s
+        res = ""
+
+        for r in range(numRows):
+            increment = 2 * (numRows - 1)
+            for i in range(r, len(s), increment):
+                res += s[i]
+                if 0 < r < numRows - 1 and i + increment - 2 * r < len(s):
+                    res += s[i + increment - 2 * r]
+
+        return res
+
+# 7. Reverse Integer
+# Given a signed 32-bit integer x, return x with its digits reversed. If reversing x causes the value to go outside the signed 32-bit integer range [-231, 231 - 1], then return 0.
+#
+# Assume the environment does not allow you to store 64-bit integers (signed or unsigned).
+class Reverse_Integer:
+    def reverse(self, x: int) -> int:
+        MIN = - 2 ** 31
+        MAX = 2 ** 31 - 1
+
+        res = 0
+        while x:
+            digit = int(math.fmod(x, 10))
+            x = int(x / 10)
+
+            if res > MAX // 10 or (res == MAX // 10 and digit > MAX % 10):
+                return 0
+            if res < MIN // 10 or (res == MIN // 10 and digit < MIN % 10):
+                return 0
+
+            res = res * 10 + digit
+
+        return res
+
 
