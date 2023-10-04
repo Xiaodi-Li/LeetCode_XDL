@@ -168,4 +168,93 @@ class Reverse_Integer:
 
         return res
 
+# 8. String to Integer (atoi)
+# Implement the myAtoi(string s) function, which converts a string to a 32-bit signed integer (similar to C/C++'s atoi function).
+#
+# The algorithm for myAtoi(string s) is as follows:
+#
+# Read in and ignore any leading whitespace.
+# Check if the next character (if not already at the end of the string) is '-' or '+'. Read this character in if it is either. This determines if the final result is negative or positive respectively. Assume the result is positive if neither is present.
+# Read in next the characters until the next non-digit character or the end of the input is reached. The rest of the string is ignored.
+# Convert these digits into an integer (i.e. "123" -> 123, "0032" -> 32). If no digits were read, then the integer is 0. Change the sign as necessary (from step 2).
+# If the integer is out of the 32-bit signed integer range [-231, 231 - 1], then clamp the integer so that it remains in the range. Specifically, integers less than -231 should be clamped to -231, and integers greater than 231 - 1 should be clamped to 231 - 1.
+# Return the integer as the final result.
+# Note:
+#
+# Only the space character ' ' is considered a whitespace character.
+# Do not ignore any characters other than the leading whitespace or the rest of the string after the digits.
+class String_to_Integer:
+    def myAtoi(self, s: str) -> int:
+        s = s.strip()
+        if not s:
+            return 0
+        negative = False
+        out = 0
 
+        if s[0] == '-':
+            negative = True
+        elif s[0] == '+':
+            negative = False
+        elif not s[0].isnumeric():
+            return 0
+        else:
+            out = ord(s[0]) - ord('0')
+
+        for i in range(1, len(s)):
+            if s[i].isnumeric():
+                out = out * 10 + ord(s[i]) - ord('0')
+                if not negative and out >= 2 ** 31 - 1:
+                    return 2 ** 31 - 1
+                if negative and out >= 2 ** 31:
+                    return - 2 ** 31
+            else:
+                break
+
+        if negative:
+            return - out
+        else:
+            return out
+
+# 9. Palindrome Number
+# Given an integer x, return true if x is a
+# palindrome
+# , and false otherwise.
+class Palindrome_Number:
+    def isPalindrome(self, x: int) -> bool:
+        if x < 0:
+            return False
+
+        reverse_num = 0
+        temp = x
+
+        while temp:
+            digit = temp % 10
+            reverse_num = reverse_num * 10 + digit
+            temp //= 10
+
+        return reverse_num == x
+
+# 10. Regular Expression Matching
+# Given an input string s and a pattern p, implement regular expression matching with support for '.' and '*' where:
+#
+# '.' Matches any single character.​​​​
+# '*' Matches zero or more of the preceding element.
+# The matching should cover the entire input string (not partial).
+class Regular_Expression_Matching:
+    def isMatch(self, s: str, p: str) -> bool:
+        @cache
+        def dfs(i, j):
+            if i >= len(s) and j >= len(p):
+                return True
+            if j >= len(p):
+                return False
+
+            match = i < len(s) and (s[i] == p[j] or p[j] == '.')
+            if j + 1 < len(p) and p[j + 1] == '*':
+                return dfs(i, j + 2) or (match and dfs(i + 1, j))
+            if match:
+                return dfs(i + 1, j + 1)
+
+            return False
+
+        return dfs(0, 0)
