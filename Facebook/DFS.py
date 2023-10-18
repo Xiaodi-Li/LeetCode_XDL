@@ -43,3 +43,87 @@ class Remove_Invalid_Parentheses:
         ans = []
         dfs(s, 0, l, r, ans)
         return ans
+
+# 200. Number of Islands
+# Given an m x n 2D binary grid grid which represents a map of '1's (land) and '0's (water), return the number of islands. An island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically. You may assume all four edges of the grid are all surrounded by water.
+class Number_of_Islands:
+    def numIslands(self, grid: List[List[str]]) -> int:
+        m = len(grid)
+        if m < 0: return 0
+        n = len(grid[0])
+
+        ans = 0
+        for y in range(m):
+            for x in range(n):
+                if grid[y][x] == '1':
+                    ans += 1
+                    self.__dfs(grid, y, x, m, n)
+
+        return ans
+
+    def __dfs(self, grid, y, x, m, n):
+        if y >= m or x >= n or y < 0 or x < 0 or grid[y][x] == '0':
+            return
+        grid[y][x] = '0'
+        self.__dfs(grid, y + 1, x, m, n)
+        self.__dfs(grid, y - 1, x, m, n)
+        self.__dfs(grid, y, x + 1, m, n)
+        self.__dfs(grid, y, x - 1, m, n)
+
+# 129. Sum Root to Leaf Numbers
+# You are given the root of a binary tree containing digits from 0 to 9 only.
+#
+# Each root-to-leaf path in the tree represents a number.
+#
+# For example, the root-to-leaf path 1 -> 2 -> 3 represents the number 123.
+# Return the total sum of all root-to-leaf numbers. Test cases are generated so that the answer will fit in a 32-bit integer.
+#
+# A leaf node is a node with no children.
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Sum_Root_to_Leaf_Numbers_I:
+    def sumNumbers(self, root: Optional[TreeNode]) -> int:
+        root_to_leaf = 0
+        stack = [(root, 0)]
+
+        while stack:
+            root, curr_num = stack.pop()
+            if root is not None:
+                curr_num = curr_num * 10 + root.val
+                if root.left is None and root.right is None:
+                    root_to_leaf += curr_num
+                else:
+                    stack.append((root.right, curr_num))
+                    stack.append((root.left, curr_num))
+
+        return root_to_leaf
+
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Sum_Root_to_Leaf_Numbers_II:
+    def sumNumbers(self, root: Optional[TreeNode]) -> int:
+        def preorder(r, curr_num):
+            nonlocal root_to_leaf
+            if r:
+                curr_num = curr_num * 10 + r.val
+
+                if not (r.left or r.right):
+                    root_to_leaf += curr_num
+
+                preorder(r.right, curr_num)
+                preorder(r.left, curr_num)
+
+        root_to_leaf = 0
+        curr_num = 0
+        preorder(root, curr_num)
+        return root_to_leaf
+
