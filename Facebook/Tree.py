@@ -39,3 +39,55 @@ class Lowest_Common_Ancestor_of_BT:
         if root in (None, p, q): return root
         left, right = (self.lowestCommonAncestor(kid, p, q) for kid in (root.left, root.right))
         return root if left and right else left or right
+
+# 199. Binary Tree Right Side View
+# Given the root of a binary tree, imagine yourself standing on the right side of it, return the values of the nodes you can see ordered from top to bottom.
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Binary_Tree_Right_Side_View_B:
+    def rightSideView(self, root: Optional[TreeNode]) -> List[int]:
+        if root is None: return []
+        next_level = collections.deque([root, ])
+        rightside = []
+
+        while next_level:
+            curr_level = next_level
+            next_level = collections.deque()
+
+            while curr_level:
+                node = curr_level.popleft()
+
+                if node.left:
+                    next_level.append(node.left)
+                if node.right:
+                    next_level.append(node.right)
+            rightside.append(node.val)
+
+        return rightside
+
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Binary_Tree_Right_Side_View_D:
+    def rightSideView(self, root: Optional[TreeNode]) -> List[int]:
+        if root is None: return []
+
+        rightside = []
+
+        def dfs(node, level):
+            if level == len(rightside):
+                rightside.append(node.val)
+            for child in [node.right, node.left]:
+                if child:
+                    dfs(child, level + 1)
+
+        dfs(root, 0)
+        return rightside
