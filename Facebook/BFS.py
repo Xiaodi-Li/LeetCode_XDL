@@ -71,3 +71,32 @@ class Vertical_Order_Traversal:
                 ret[col] = [val]
 
         return ret.values()
+
+# 199. Binary Tree Right Side View
+# Given the root of a binary tree, imagine yourself standing on the right side of it, return the values of the nodes you can see ordered from top to bottom.
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Binary_Tree_Right_Side_View_B:
+    def rightSideView(self, root: Optional[TreeNode]) -> List[int]:
+        if root is None: return []
+        next_level = collections.deque([root, ])
+        rightside = []
+
+        while next_level:
+            curr_level = next_level
+            next_level = collections.deque()
+
+            while curr_level:
+                node = curr_level.popleft()
+
+                if node.left:
+                    next_level.append(node.left)
+                if node.right:
+                    next_level.append(node.right)
+            rightside.append(node.val)
+
+        return rightside
