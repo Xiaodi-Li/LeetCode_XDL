@@ -47,3 +47,35 @@ class Move_Zeroes:
                 slow += 1
 
         return nums
+
+# 296. Best Meeting Point
+# Given an m x n binary grid grid where each 1 marks the home of one friend, return the minimal total travel distance.
+#
+# The total travel distance is the sum of the distances between the houses of the friends and the meeting point.
+#
+# The distance is calculated using Manhattan Distance, where distance(p1, p2) = |p2.x - p1.x| + |p2.y - p1.y|.
+class Best_Meeting_Point:
+    def minTotalDistance(self, grid: List[List[int]]) -> int:
+        row_sum = list(map(sum, grid))
+        col_sum = list(map(sum, zip(*grid)))
+
+        def minTotalDistance1D(vec):
+            i, j = -1, len(vec)
+            left = right = 0
+            d = 0
+
+            while i != j:
+                if left < right:
+                    d += left
+                    i += 1
+                    left += vec[i]
+                else:
+                    d += right
+                    j -= 1
+                    right += vec[j]
+            return d
+
+        return minTotalDistance1D(row_sum) + minTotalDistance1D(col_sum)
+
+
+
