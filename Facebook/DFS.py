@@ -127,3 +127,27 @@ class Sum_Root_to_Leaf_Numbers_II:
         preorder(root, curr_num)
         return root_to_leaf
 
+# 199. Binary Tree Right Side View
+# Given the root of a binary tree, imagine yourself standing on the right side of it, return the values of the nodes you can see ordered from top to bottom.
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Binary_Tree_Right_Side_View_D:
+    def rightSideView(self, root: Optional[TreeNode]) -> List[int]:
+        if root is None: return []
+
+        rightside = []
+
+        def dfs(node, level):
+            if level == len(rightside):
+                rightside.append(node.val)
+            for child in [node.right, node.left]:
+                if child:
+                    dfs(child, level + 1)
+
+        dfs(root, 0)
+        return rightside
+
