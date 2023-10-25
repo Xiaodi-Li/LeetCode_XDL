@@ -91,3 +91,31 @@ class Binary_Tree_Right_Side_View_D:
 
         dfs(root, 0)
         return rightside
+
+# 270. Closest Binary Search Tree Value
+# Given the root of a binary search tree and a target value, return the value in the BST that is closest to the target. If there are multiple answers, print the smallest.
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Closest_Binary_Search_Tree_Value:
+    def closestValue(self, root: Optional[TreeNode], target: float) -> int:
+        min_diff = sys.maxsize
+        min_val = -1
+        def dfs(node):
+            nonlocal min_diff, min_val
+            if node is None: return
+            if abs(target - node.val) < min_diff:
+                min_diff = abs(target - node.val)
+                min_val = node.val
+            elif abs(target - node.val) == min_diff:
+                if node.val < min_val:
+                    min_val = node.val
+            if node.val > target:
+                dfs(node.left)
+            else:
+                dfs(node.right)
+        dfs(root)
+        return min_val
