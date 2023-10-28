@@ -20,3 +20,26 @@ class Diagonal_Traverse:
 
         return ans
 
+
+# 1424. Diagonal Traverse II
+# Given a 2D integer array nums, return all elements of nums in diagonal order as shown in the below images.
+class Diagonal_Traverse_II:
+    def findDiagonalOrder(self, nums: List[List[int]]) -> List[int]:
+        diag_dict = {}
+
+        for row in range(len(nums) - 1, -1, -1):
+            for col in range(len(nums[row]) - 1, -1, -1):
+                if row + col in diag_dict:
+                    diag_dict[row + col].append(nums[row][col])
+                else:
+                    diag_dict[row + col] = [nums[row][col]]
+
+        ans = []
+        curr = 0
+
+        while curr in diag_dict:
+            ans.extend(diag_dict[curr])
+            curr += 1
+
+        return ans
+
