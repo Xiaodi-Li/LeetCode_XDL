@@ -114,3 +114,20 @@ class Add_Strings:
             res.append(carry)
 
         return ''.join(str(x) for x in res[::-1])
+
+# 953. Verifying an Alien Dictionary
+# In an alien language, surprisingly, they also use English lowercase letters, but possibly in a different order. The order of the alphabet is some permutation of lowercase letters.
+#
+# Given a sequence of words written in the alien language, and the order of the alphabet, return true if and only if the given words are sorted lexicographically in this alien language.
+class Verifying_an_Alien_Dictionary:
+    def isAlienSorted(self, words: List[str], order: str) -> bool:
+        order_dict = {char: i for i, char in enumerate(order)}
+        for i in range(len(words) - 1):
+            for j in range(len(words[i])):
+                if j > len(words[i + 1]) - 1:
+                    return False
+                if order_dict[words[i][j]] > order_dict[words[i + 1][j]]:
+                    return False
+                if order_dict[words[i][j]] < order_dict[words[i + 1][j]]:
+                    break
+        return True
