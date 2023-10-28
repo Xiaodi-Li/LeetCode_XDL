@@ -131,3 +131,19 @@ class Verifying_an_Alien_Dictionary:
                 if order_dict[words[i][j]] < order_dict[words[i + 1][j]]:
                     break
         return True
+
+# 125. Valid Palindrome
+# A phrase is a palindrome if, after converting all uppercase letters into lowercase letters and removing all non-alphanumeric characters, it reads the same forward and backward. Alphanumeric characters include letters and numbers.
+#
+# Given a string s, return true if it is a palindrome, or false otherwise.
+class Valid_Palindrome:
+    def isPalindrome(self, s: str) -> bool:
+        s = s.lower()
+        s = ''.join(filter(str.isalnum, s))
+
+        for i in range(len(s) // 2):
+            if s[i] == s[len(s) - i - 1]:
+                continue
+            else:
+                return False
+        return True
