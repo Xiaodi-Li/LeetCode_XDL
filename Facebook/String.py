@@ -147,3 +147,26 @@ class Valid_Palindrome:
             else:
                 return False
         return True
+
+# 140. Word Break II
+# Given a string s and a dictionary of strings wordDict, add spaces in s to construct a sentence where each word is a valid dictionary word. Return all such possible sentences in any order.
+#
+# Note that the same word in the dictionary may be reused multiple times in the segmentation.
+class Word_Break_II:
+    def wordBreak(self, s: str, wordDict: List[str]) -> List[str]:
+        words = set(wordDict)
+        mem = {}
+
+        def wordbreak(s):
+            if s in mem: return mem[s]
+            ans = []
+            if s in words: ans.append(s)
+
+            for i in range(1, len(s)):
+                right = s[i:]
+                if right not in words: continue
+                ans += [w + ' ' + right for w in wordbreak(s[:i])]
+            mem[s] = ans
+            return mem[s]
+
+        return wordbreak(s)
