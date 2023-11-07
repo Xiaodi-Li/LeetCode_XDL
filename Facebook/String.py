@@ -170,3 +170,40 @@ class Word_Break_II:
             return mem[s]
 
         return wordbreak(s)
+
+# 1541. Minimum Insertions to Balance a Parentheses String
+# Given a parentheses string s containing only the characters '(' and ')'. A parentheses string is balanced if:
+#
+# Any left parenthesis '(' must have a corresponding two consecutive right parenthesis '))'.
+# Left parenthesis '(' must go before the corresponding two consecutive right parenthesis '))'.
+# In other words, we treat '(' as an opening parenthesis and '))' as a closing parenthesis.
+#
+# For example, "())", "())(())))" and "(())())))" are balanced, ")()", "()))" and "(()))" are not balanced.
+# You can insert the characters '(' and ')' at any position of the string to balance it if needed.
+#
+# Return the minimum number of insertions needed to make s balanced.
+class Minimum_Insertions_BPS:
+    def minInsertions(self, s: str) -> int:
+        res = right = 0
+        for c in s:
+            if c == '(':
+                if right % 2:
+                    right -= 1
+                    res += 1
+                right += 2
+            if c == ')':
+                right -= 1
+                if right < 0:
+                    right += 2
+                    res += 1
+        return res + right
+
+'''
+"(()))"
+right: 0, 2, 4, 3, 2, 1 
+res:   0, 0, 0, 0, 0, 0
+
+"))())("
+right: 0, 1, 0, 2, 1, 0, 2  
+res:   0, 1, 1, 1, 1, 1, 1
+'''
