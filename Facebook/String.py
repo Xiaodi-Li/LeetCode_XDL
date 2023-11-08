@@ -255,3 +255,26 @@ class Remove_All_Adjacent_Duplicates_in_String_II:
         for char, count in stack:
             res += (char * count)
         return res
+
+# 1060. Missing Element in Sorted Array
+# Given an integer array nums which is sorted in ascending order and all of its elements are unique and given also an integer k, return the kth missing number starting from the leftmost number of the array.
+class Missing_Element_in_Sorted_Array:
+    def missingElement(self, nums: List[int], k: int) -> int:
+        for i in range(1, len(nums)):
+            missing_count = nums[i] - nums[i - 1] - 1
+            if k <= missing_count:
+                return nums[i - 1] + k
+            k -= missing_count
+        return nums[-1] + k
+
+'''
+[4,7,9,10]
+k = 3
+missing_count: 2, 1 
+k:             1, 1 return 8
+
+[1,2,4]
+k = 3
+missing_count: 0, 1, 
+k:             3, 2, return 6
+'''
