@@ -223,3 +223,62 @@ class Flatten_Binary_Tree:
             return rightTail if rightTail else leftTail
 
         dfs(root)
+
+# 1161. Maximum Level Sum of a Binary Tree
+# Given the root of a binary tree, the level of its root is 1, the level of its children is 2, and so on.
+#
+# Return the smallest level x such that the sum of all the values of nodes at level x is maximal.
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Maximum_Level_Sum_DFS:
+    def maxLevelSum(self, root: Optional[TreeNode]) -> int:
+        def dfs(node, level, sum_at_current_level):
+            if not node: return
+
+            if len(sum_at_current_level) == level:
+                sum_at_current_level.append(node.val)
+            else:
+                sum_at_current_level[level] += node.val
+
+            dfs(node.left, level + 1, sum_at_current_level)
+            dfs(node.right, level + 1, sum_at_current_level)
+
+        sum_at_current_level = []
+        dfs(root, 0, sum_at_current_level)
+
+        return 1 + sum_at_current_level.index(max(sum_at_current_level))
+
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Maximum_Level_Sum_BFS:
+    def maxLevelSum(self, root: Optional[TreeNode]) -> int:
+        max_sum, level, ans = float('-inf'), 0, 0
+
+        q = collections.deque()
+        q.append(root)
+
+        while q:
+            level += 1
+            sum_of_current_level = 0
+            for _ in range(len(q)):
+                node = q.popleft()
+                sum_of_current_level += node.val
+
+                if node.left:
+                    q.append(node.left)
+                if node.right:
+                    q.append(node.right)
+
+            if max_sum < sum_of_current_level:
+                max_sum, ans = sum_of_current_level, level
+
+        return ans
