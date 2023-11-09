@@ -324,3 +324,29 @@ class Maximum_Level_Sum_BFS:
                 max_sum, ans = sum_of_current_level, level
 
         return ans
+
+# 490. The Maze
+# There is a ball in a maze with empty spaces (represented as 0) and walls (represented as 1). The ball can go through the empty spaces by rolling up, down, left or right, but it won't stop rolling until hitting a wall. When the ball stops, it could choose the next direction.
+#
+# Given the m x n maze, the ball's start position and the destination, where start = [startrow, startcol] and destination = [destinationrow, destinationcol], return true if the ball can stop at the destination, otherwise return false.
+#
+# You may assume that the borders of the maze are all walls (see examples).
+class The_Maze:
+    def hasPath(self, maze: List[List[int]], start: List[int], destination: List[int]) -> bool:
+        m, n, stopped = len(maze), len(maze[0]), set()
+        def dfs(x, y):
+            if (x, y) in stopped:
+                return False
+            stopped.add((x, y))
+            if [x, y] == destination:
+                return True
+            for i, j in (1, 0), (-1, 0), (0, 1), (0, -1):
+                new_x, new_y = x, y
+                while 0 <= new_x + i < m and 0 <= new_y + j < n and maze[new_x + i][new_y + j] != 1:
+                    new_x += i
+                    new_y += j
+                if dfs(new_x, new_y):
+                    return True
+            return False
+        return dfs(start[0], start[1])
+
