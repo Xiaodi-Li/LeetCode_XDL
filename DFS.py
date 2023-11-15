@@ -1,11 +1,11 @@
-780 · Remove Invalid Parentheses
-Description
-Remove the minimum number of invalid parentheses in order to make the input string valid. Return all possible results.
+# 780 · Remove Invalid Parentheses
+# Description
+# Remove the minimum number of invalid parentheses in order to make the input string valid. Return all possible results.
 from typing import (
     List,
 )
 
-class Solution:
+class RemoveInvalidParenthesis:
     """
     @param s: The input string
     @return: Return all possible results
@@ -53,4 +53,5 @@ class Solution:
         
         ans = []
         dfs(s, 0, l, r, ans)
-        return ans    
+        return ans
+
